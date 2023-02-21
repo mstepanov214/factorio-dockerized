@@ -1,0 +1,50 @@
+# https://hub.docker.com/r/factoriotools/factorio/
+# https://github.com/ZCube/factorio-port-fixer
+
+version: '3.5'
+services:
+  pingpong:
+    image: ghcr.io/zcube/factorio-port-fixer
+    container_name: pingpong
+    command: /factorio-port-fixer local --ip=0.0.0.0 --port=34197 --remotePort=${PORT:-34197}
+    restart: unless-stopped
+    environment:
+     - PORT=${PORT:-34197}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+    
+
+  factorio:
+    image: factoriotools/factorio
+    container_name: factorio
+    ports:
+     - "${PORT:-34197}:${PORT:-34197}/udp"
+     - "27015:27015/tcp"
+    volumes:
+     - ./data:/factorio
+     - ./server-settings.json:/server-settings.json
+    restart: unless-stopped
+    stdin_open: true
+
+    links:
+     - 'pingpong:pingpong1.factorio.com'
+     - 'pingpong:pingpong2.factorio.com'
+     - 'pingpong:pingpong3.factorio.com'
+     - 'pingpong:pingpong4.factorio.com'
+
+    healthcheck:
+      test: curl --fail pingpong:34197/health || exit 1
+      interval: 20s
+      retries: 5
+      start_period: 20s
+      timeout: 10s
+
+    entrypoint: /bin/sh -c "mkdir -p /factorio/config && cat /server-settings.json > /factorio/config/server-settings.json && exec /docker-entrypoint.sh"
+    
+    environment:
+     - PORT=${PORT:-34197}
+      # - LOAD_LATEST_SAVE=true
+      # - SAVE_NAME=_autosave1
+      # - GENERATE_NEW_SAVE=false
