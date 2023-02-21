@@ -12,14 +12,6 @@ Run the server:
 ./bin/start.sh
 ```
 
-Check the logs:
-
-```sh
-docker logs -f factorio
-```
-
-After further configuration changes, factorio container should be restarted.
-
 ### Upgrading
 
 ```sh
