@@ -5,6 +5,7 @@
 ### Quick Start
 
 Modify `server-settings.json`: username and password/token is required.
+
 Run the server:
 
 ```sh
@@ -22,5 +23,5 @@ After further configuration changes, factorio container should be restarted.
 ### Upgrading
 
 ```sh
-./bin/start.sh
+./bin/upgrade.sh
 ```
