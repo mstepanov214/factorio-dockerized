@@ -9,12 +9,14 @@ source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
 function script_usage() {
     cat <<EOF
 
-Usage:  $BASH_SOURCE [OPTIONS] 
+Usage:  $BASH_SOURCE [OPTIONS]
+
+Start Factorio server
 
 Options:
-     -h, --help                Displays this help
+     -h, --help                Display this help
      -p, --port                UDP port the server listens on (default 34197)
-         --port-fix            Run with port-fixer (If incorrect port detected for hosted server)
+         --port-fix            Run with port-fixer (if incorrect port detected for hosted server)
 EOF
 }
 
