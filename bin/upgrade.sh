@@ -1,7 +1,6 @@
 #!/bin/bash
 
-ROOT=$(dirname "$0")/..
-cd $ROOT
+cd $(dirname "$0")/..
 
 docker stop factorio &>/dev/null
 docker rm factorio &>/dev/null

@@ -39,7 +39,7 @@ cd $(dirname "$0")/..
 parse_params "$@"
 
 service_count=$(docker ps -q -f status=running -f name=^/factorio | wc -l)
-if ([ "$port_fix" == true ] && [ $service_count -eq 2 ]) || ([ "$port_fix" = false ] && [ $service_count -eq 1 ]); then
+if ([ "$port_fix" = true ] && [ $service_count -eq 2 ]) || ([ "$port_fix" = false ] && [ $service_count -eq 1 ]); then
     echo "Factorio server is already running"
     exit 0
 fi
