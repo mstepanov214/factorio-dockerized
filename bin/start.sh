@@ -28,7 +28,8 @@ function parse_params() {
             port_fix=true
             ;;
         *)
-            script_exit "Invalid parameter was provided: $param" 1
+            echo "Invalid parameter was provided: $param"
+            exit 1
             ;;
         esac
     done
