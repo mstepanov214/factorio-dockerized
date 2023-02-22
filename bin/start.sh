@@ -4,16 +4,23 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/_utils.sh"
+
 function script_usage() {
     cat <<EOF
-Usage:
-     -h|--help                Displays this help
-     --port-fix               Run with port-fixer (Incorrect port detected for hosted server)
+
+Usage:  $BASH_SOURCE [OPTIONS] 
+
+Options:
+     -h, --help                Displays this help
+     -p, --port                UDP port the server listens on (default 34197)
+         --port-fix            Run with port-fixer (If incorrect port detected for hosted server)
 EOF
 }
 
 function parse_params() {
     port_fix=false
+    port=34197
 
     local param
     while [[ $# -gt 0 ]]; do
@@ -23,6 +30,11 @@ function parse_params() {
         -h | --help)
             script_usage
             exit 0
+            ;;
+        -p | --port)
+            validate_port $1
+            port=$1
+            shift
             ;;
         --port-fix)
             port_fix=true
@@ -39,16 +51,18 @@ cd $(dirname "$0")/..
 
 parse_params "$@"
 
-service_count=$(docker ps -q -f status=running -f name=^/factorio | wc -l)
-if ([ "$port_fix" = true ] && [ $service_count -eq 2 ]) || ([ "$port_fix" = false ] && [ $service_count -eq 1 ]); then
-    echo "Factorio server is already running"
-    exit 0
-fi
+# service_count=$(docker ps -q -f status=running -f name=^/factorio | wc -l)
+# if ([ "$port_fix" = true ] && [ $service_count -eq 2 ]) || ([ "$port_fix" = false ] && [ $service_count -eq 1 ]); then
+#     echo "Factorio server is already running"
+#     exit 0
+# fi
 
 if [ ! -d './data' ]; then
     mkdir -p ./data
     sudo chown 845:845 ./data
 fi
+
+echo "PORT=$port" >.env
 
 if [ "$port_fix" = true ]; then
     docker-compose -f factorio-pf.yml up -d
