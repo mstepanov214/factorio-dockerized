@@ -1,11 +1,13 @@
-# https://hub.docker.com/r/factoriotools/factorio/
+# Incorrect port detected for docker hosted factorio server
 # https://github.com/ZCube/factorio-port-fixer
+
+# https://hub.docker.com/r/factoriotools/factorio/
 
 version: "3.5"
 services:
   pingpong:
     image: ghcr.io/zcube/factorio-port-fixer
-    container_name: pingpong
+    container_name: factorio-pf
     command: /factorio-port-fixer local --ip=0.0.0.0 --port=34197 --remotePort=${PORT:-34197}
     restart: unless-stopped
     environment:
