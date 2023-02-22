@@ -11,11 +11,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./data:/factorio
-      - ./server-settings.json:/server-settings.json
     restart: unless-stopped
     stdin_open: true
-
-    entrypoint: /bin/sh -c "mkdir -p /factorio/config && cat /server-settings.json > /factorio/config/server-settings.json && exec /docker-entrypoint.sh"
 
     environment:
       - PORT=${PORT:-34197}
